@@ -11,7 +11,7 @@ This dataset is maintained using Socrata's API and Kaggle's API. Socrata has ass
 This dataset is distributed under the following licenses: Public Domain, Public Domain U.S. Govern. 
 
 Deaths in USA due to major diseases (2005 – 2015)
-STAT 515 – applied statistics and visualization of analytics
+STAT 515 – Applied Statistics and Visualization of Analytics
 Dilip Molugu
 MS in Data Analytics Engineering George Mason University dmolugu@gmu.edu
 

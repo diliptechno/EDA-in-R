@@ -12,7 +12,7 @@ The data is updated day to day. The dataset used in this exploration is only til
 Acknowledgements
 
 This dataset is maintained using Socrata's API and Kaggle's API. Socrata has assisted countless organizations with hosting their open data and has been an integral part of the process of bringing more data to the public. 
-This dataset is distributed under the following licenses: Public Domain, Public Domain U.S. Govern. 
+This dataset is distributed under the following licenses: Public Domain, Public Domain U.S. Govern (https://www.cdc.gov/nchs/data_access/ftp_data.htm)
 
 Deaths in USA due to major diseases (2005 – 2015)
 STAT 515 – Applied Statistics and Visualization of Analytics

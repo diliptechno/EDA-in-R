@@ -1,6 +1,8 @@
 # Deaths in USA due to major diseases (2005 – 2015) (EDA-in-R)
 Exploratory data analysis in R using the data from the NCHS and CDC data taken from Kaggle.
 
+![](/Images/Plot1.png)
+
 Data
 
 The dataset is taken from Kaggle which consists of different files related to the deaths in the US.

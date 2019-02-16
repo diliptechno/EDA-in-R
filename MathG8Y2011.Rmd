@@ -1,0 +1,167 @@
+---
+title: "Micromaps"
+author: "Dilip Molugu"
+date: "December 16, 2017"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 0. Setup
+
+```{r}
+library(tidyverse)
+library(micromapST)
+```
+
+
+
+```{r}
+stateNames <- read.csv(file = 'stateNames.csv',
+  header = TRUE,as.is = TRUE)[,1]
+
+toFix <- read.csv(file = "stateNames_aka.csv",
+  header = TRUE,as.is = TRUE)
+   
+head(toFix)
+```
+## use select to remove varaiables and filter to remove rows
+```{r}
+mG8Y2011 <- toFix %>% 
+  select(-(SigDiff:SigSymbol)) %>%
+  filter(Jurisdiction %in% stateNames)
+head(mG8Y2011)
+```
+
+```{r}
+mG8Y2011Fixed <- read.csv(file = "stateNames_aka.csv",
+  header = TRUE,as.is = TRUE)
+
+# compare the resulting data frames
+all.equal(mG8Y2011, mG8Y2011Fixed)
+```
+
+
+## 1.2 Create a micromap column description data.frame
+```{r}
+## Run
+
+stateNames <- read.csv(file = 'stateNames.csv',
+                       header = TRUE,as.is = TRUE)[,1]
+colDesc <- data.frame(
+  type = c('id','map','dot','dot', 'dot'),
+lab1 = c('','','Observed Deaths','Expected Deaths', 'Potentially excess deaths'),
+  col1 = c(NA,NA,'Observed Deaths','Expected Deaths', 'Potentially excess deaths')
+  )
+```
+
+In the column specificaton above, the micromap is to have
+5 types of column.  They are, in left to right order, a map
+column, and id column and three dot plot columns.
+
+Each column can have two label lines above it and one
+label line below it.  
+
+The lab1 argument is a character string vector with
+a character string for each column. The map and id
+columns have automatic labels.  We enter two null
+string ('', '' ,) as place holders. We want the top
+label in the 3rd column to be blank so include another null
+string ('',) as a place holder. We want the top labels
+in the 4th and 5th columns to be 'Above'.   
+
+The lab2 argument is a character string vector with a
+character string for each column.  Again we include
+empty character string as place holders for the map
+and id columns. This time we label the three last columns.
+
+The lab3 argument ia character string vector with a
+character string for each column. The   
+dot column bottom labels include the units of measure.
+
+The col1 argument specifies the column values in the data.frame
+to locate dots respective columns of the micromap.
+
+A second micromap example specifies dotse as column types. 
+Each micromap dotse column requires two columns
+from data data.frame, one for mean and one for the standard error. 
+plot. Hence the column description will have a col2 line
+to specify the "se" data columns.  
+
+There are more panel description arguments that can be included
+in the column description file when needed.
+
+## 1.3 Use the micromapST function to produce plot. 
+
+Below the first two arguments are the data data.frame
+and the column description data.frame.  
+
+The next two arguments specify column with the
+state ids and the type of id. 
+
+The plotNames='full' puts the full statenames in the micromap.
+the sortVar = 'MN' uses the variable to sort,
+and ascend=FALSE makes the order descending.  
+The title argument is a character string of length one or two.  
+
+```{r echo=FALSE, fig.width=7.5, fig.height=10}
+#pdf(file= "mG8Y2011Dots.pdf" , width=7.5, height=10)
+
+
+poppy<-micromapST(mG8Y2011Fixed, colDesc,
+           rowNamesCol = 'StateNames', rowNames = 'full',
+           plotNames= 'full',
+           sortVar = 'Deaths',ascend=TRUE,
+           # staggerLab='FALSE'
+           axisScale = 'sn',
+           staggerLab = FALSE,
+           # bordDir=bordGrp,
+           title = c('DISEASES',
+                     'DATA'))
+
+#dev.off()
+```
+
+
+## 2. Dot plots with 95% confidence interval based on standard error
+
+## 2.1 Change the column description data.frame
+
+The glyph use 'dotse'.  We also specify
+the location of the standard errors in the  
+data data.frame using the col2 vector.
+
+```{r}
+## Run
+
+colDescSe <- data.frame(
+type = c('map','id','dotse','dotse','dotse'),
+lab1 = c('','','','Above','Above'),
+lab2 = c('' ,'','Mean','Basic','Proficient'),
+lab3 = c('','','Possible 0-500','Percent','Percent'),
+col1 = c(NA,NA,'MN','AB','AP'),
+col2 = c(NA,NA,'MN_SE','MN_SE','MN_SE')
+  )
+
+t(colDescSe)
+```
+
+
+## 2.2 This time open a pdf file, produce plot, and close the file.  
+
+```{r }
+pdf(file = "mG8Y2011DotsSe.pdf" , width = 7.5, height = 10)
+
+micromapST(mG8Y2011, colDescSe,
+  rowNamesCol = 1,
+  rowNames = "full",
+  plotNames = "full",
+  sortVar = "MN",ascend = FALSE,
+  title = c("NAEP Math Grade 8 in 2011",
+          "Average Scale Scores and Achievement Percents"))
+
+dev.off()
+```
+
